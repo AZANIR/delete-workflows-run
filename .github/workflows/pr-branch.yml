@@ -1,0 +1,40 @@
+name: "test -> build -> update lib if needed"
+on:
+  push:
+    branches:
+      - 'master'
+      - 'add-release'
+    tags:
+      - '!**'
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: "install"
+        run: npm install
+
+      - name: "build"
+        run: npm run build
+
+      - name: "check if build has changed"
+        if: success()
+        id: has-changes
+        run: |
+          echo "LIB_DIFF=$(git diff --stat --name-only  -- lib)"  >> $GITHUB_ENV
+
+      - name: "Commit files"
+        if: ${{ env.LIB_DIFF }}
+        run: |
+          git config --local user.email "buildaction@bot.bot"
+          git config --local user.name "Build action bot"
+          git commit -m "chore: build action" -a
+
+      - name: release
+        run: npm run release
