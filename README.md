@@ -91,8 +91,8 @@ jobs:
       actions: write
       contents: read
     steps:
-      - name: Delete workflow runs
-        uses: AZANIR/delete-workflow-runs@v1
+      - name: Delete workflows run
+        uses: AZANIR/delete-workflows-run@v1
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
@@ -157,8 +157,8 @@ jobs:
       actions: write
       contents: read
     steps:
-      - name: Delete workflow runs
-        uses: AZANIR/delete-workflow-runs@v1
+      - name: Delete workflows run
+        uses: AZANIR/delete-workflows-run@v1
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
